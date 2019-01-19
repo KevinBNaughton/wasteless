@@ -1,0 +1,12 @@
+<h1> Hey </h1>
+
+<div id='map'></div>
+  <script>
+  mapboxgl.accessToken =  'pk.eyJ1IjoibHVrZXJwZmVpZmZlciIsImEiOiJjam14aTZzbnExN3JkM2tuMTR3cGJybnE1In0.uYrpAhiX9b6uSo5i4nMTLg';
+  var map = new mapboxgl.Map({
+      container: 'map', // container id
+      style: 'mapbox://styles/mapbox/streets-v9', // stylesheet location
+      center: [-82.3248, 29.6516], // starting position [lng, lat]
+      zoom: 5.5 // starting zoom
+  });
+</script>
