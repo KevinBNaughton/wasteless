@@ -1,109 +1,157 @@
-<h1> Hey </h1>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Wasteless </title>
+  </head>
 
-<div id='map'></div>
-<div id='map-overlay' class='map-overlay'></div>
-  <script>
-  mapboxgl.accessToken =  'pk.eyJ1IjoibHVrZXJwZmVpZmZlciIsImEiOiJjam14aTZzbnExN3JkM2tuMTR3cGJybnE1In0.uYrpAhiX9b6uSo5i4nMTLg';
-  var map = new mapboxgl.Map({
-      container: 'map', // container id
-      style: 'mapbox://styles/mapbox/streets-v9', // stylesheet location
-      center: [-82.3248, 29.6516], // starting position [lng, lat]
-      zoom: 5.5 // starting zoom
-  });
+  <body>
+    
+    <div class="form-popup" id="rating_form">
+        <div class="container">
+            <form class="form-container">
+            <h3>Send an email <br>to your local senator</h3>
+            <select ng-model="newRating.name">
+                <option value="Select Lot"  ng-value="listing.name" ng-repeat="listing in listings track by $index | orderBy: name">{{listing.name}}</option>
+                
+            </select>
+            <label for="email"><b>Email:</b></label>
+            <input type="text" placeholder="Enter email" ng-model="newRating.email" name="email" required>
+            <br>
 
-var overlay = document.getElementById('map-overlay');
+
+            <button type="submit" class="btn" ng-click="addRating()" onclick="window.location.reload()">Submit</button>
+            <button type="submit" class="btn cancel" onclick="closeForm()">Close</button>
+            </form>
+        </div>
+    </div>
 
 
-// Create a popup, but don't add it to the map yet.
-var popup = new mapboxgl.Popup({
-    closeButton: false
-});
+    <div id='map'></div>
+    <div id='map-overlay' class='map-overlay'></div>
 
-map.on('load', function() {
-    // Add the source to query. In this example we're using
-    // county polygons uploaded as vector tiles
+    <script>
+    mapboxgl.accessToken =  'pk.eyJ1IjoibHVrZXJwZmVpZmZlciIsImEiOiJjam14aTZzbnExN3JkM2tuMTR3cGJybnE1In0.uYrpAhiX9b6uSo5i4nMTLg';
+    var map = new mapboxgl.Map({
+        container: 'map', // container id
+        style: 'mapbox://styles/mapbox/streets-v9', // stylesheet location
+        center: [-82.3248, 29.6516], // starting position [lng, lat]
+        zoom: 5.5 // starting zoom
+    });
+
     var overlay = document.getElementById('map-overlay');
 
-    // Create a popup, but don't add it to the map yet.
+
     var popup = new mapboxgl.Popup({
         closeButton: false
     });
-    map.addSource('counties', {
-        "type": "vector",
-        "url": "mapbox://mapbox.82pkq93d"
-    });
 
-    map.addLayer({
-        "id": "counties",
-        "type": "fill",
-        "source": "counties",
-        "source-layer": "original",
-        "paint": {
-            "fill-outline-color": "rgba(0,0,0,0.1)",
-            "fill-color": "rgba(0,0,0,0.1)"
-        }
-    }, 'place-city-sm'); // Place polygon under these labels.
+    map.on('load', function() {
+       
+        var overlay = document.getElementById('map-overlay');
 
-    map.addLayer({
-        "id": "counties-highlighted",
-        "type": "fill",
-        "source": "counties",
-        "source-layer": "original",
-        "paint": {
-            "fill-outline-color": "#484896",
-            "fill-color": "#6e599f",
-            "fill-opacity": 0.75
-        },
-        "filter": ["in", "COUNTY", ""]
-    }, 'place-city-sm'); // Place polygon under these labels.
 
-    map.on('omousemove', 'counties', function(e) {
-        // Change the cursor style as a UI indicator.
-        map.getCanvas().style.cursor = 'pointer';
-
-        // Single out the first found feature.
-        var feature = e.features[0];
-
-        // Query the counties layer visible in the map. Use the filter
-        // param to only collect results that share the same county name.
-        var relatedFeatures = map.querySourceFeatures('counties', {
-            sourceLayer: 'original',
-            filter: ['in', 'COUNTY', feature.properties.COUNTY]
+        var popup = new mapboxgl.Popup({
+            closeButton: false
+        });
+        map.addSource('counties', {
+            "type": "vector",
+            "url": "mapbox://mapbox.82pkq93d"
         });
 
-        // Render found features in an overlay.
-        overlay.innerHTML = '';
+        map.addLayer({
+            "id": "counties",
+            "type": "fill",
+            "source": "counties",
+            "source-layer": "original",
+            "paint": {
+                "fill-outline-color": "rgba(0,0,0,0.1)",
+                "fill-color": "rgba(0,0,0,0.1)"
+            }
+        }, 'place-city-sm'); 
 
-        // Total the population of all features
-        var populationSum = relatedFeatures.reduce(function(memo, feature) {
-            return memo + feature.properties.population;
-        }, 0);
+        map.addLayer({
+            "id": "counties-highlighted",
+            "type": "fill",
+            "source": "counties",
+            "source-layer": "original",
+            "paint": {
+                "fill-outline-color": "#484896",
+                "fill-color": "#6e599f",
+                "fill-opacity": 0.75
+            },
+            "filter": ["in", "COUNTY", ""]
+        }, 'place-city-sm');
 
-        var title = document.createElement('strong');
-        title.textContent = feature.properties.COUNTY + ' (' + relatedFeatures.length + ' found)';
+        map.on('mousemove', 'counties', function(e) {
+            // Change the cursor style as a UI indicator.
+            map.getCanvas().style.cursor = 'pointer';
 
-        var population = document.createElement('div');
-        population.textContent = 'Total population: ' + populationSum.toLocaleString();
+            // Single out the first found feature.
+            var feature = e.features[0];
 
-        overlay.appendChild(title);
-        overlay.appendChild(population);
-        overlay.style.display = 'block';
+            // Query the counties layer visible in the map. Use the filter
+            // param to only collect results that share the same county name.
+            var relatedFeatures = map.querySourceFeatures('counties', {
+                sourceLayer: 'original',
+                filter: ['in', 'COUNTY', feature.properties.COUNTY]
+            });
 
-        // Add features that share the same county name to the highlighted layer.
-        map.setFilter('counties-highlighted', ['in', 'COUNTY', feature.properties.COUNTY]);
+            // Render found features in an overlay.
+            overlay.innerHTML = '';
 
-        // Display a popup with the name of the county
-        popup.setLngLat(e.lngLat)
-            .setText(feature.properties.COUNTY)
-            .addTo(map);
+            // Total the population of all features
+            var populationSum = relatedFeatures.reduce(function(memo, feature) {
+                return memo + feature.properties.population;
+            }, 0);
+
+            var title = document.createElement('strong');
+            title.textContent = feature.properties.COUNTY + ' (' + relatedFeatures.length + ' found)';
+
+            var population = document.createElement('div');
+            population.textContent = 'Total population: ' + populationSum.toLocaleString();
+
+            overlay.appendChild(title);
+            overlay.appendChild(population);
+            overlay.style.display = 'block';
+
+            // Add features that share the same county name to the highlighted layer.
+            map.setFilter('counties-highlighted', ['in', 'COUNTY', feature.properties.COUNTY]);
+
+            // Display a popup with the name of the county
+            popup.setLngLat(e.lngLat)
+                .setText(feature.properties.COUNTY)
+                .addTo(map);
+        });
+
+        map.on('mouseleave', 'counties', function() {
+            map.getCanvas().style.cursor = '';
+            popup.remove();
+            map.setFilter('counties-highlighted', ['in', 'COUNTY', '']);
+            overlay.style.display = 'none';
+        });
     });
 
-    map.on('mouseleave', 'counties', function() {
-        map.getCanvas().style.cursor = '';
-        popup.remove();
-        map.setFilter('counties-highlighted', ['in', 'COUNTY', '']);
-        overlay.style.display = 'none';
-    });
-});
+    </script>
 
-</script>
+    <button class="open-button" onclick="openForm()">Send an Email</button>
+
+    <script>
+    var slider = document.getElementById("rating");
+    var output = document.getElementById("capacity");
+    output.innerHTML = slider.value;
+
+    slider.oninput = function() {
+      output.innerHTML = this.value;
+    }
+
+    function openForm() {
+      document.getElementById("rating_form").style.display = "block";
+    }
+
+    function closeForm() {
+      document.getElementById("rating_form").style.display = "none";
+    }
+    </script>
+
+    </body>
+</html>
