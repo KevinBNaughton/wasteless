@@ -3,13 +3,11 @@ require 'csv'
 require 'pry'
 
 class ExcelLoader
-  def self.load_data(file, option)
+  def self.load_data(file, option = nil)
     counties = Hash.new
     #right now just waste data
-    val_index = -1
-    if option == "food_waste"
-      val_index = 11
-    elsif option == "recycle_waste"
+    val_index = 11
+    if option == "recycle_waste"
       val_index = 12
     end
 

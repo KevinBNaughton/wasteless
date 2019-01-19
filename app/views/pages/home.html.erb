@@ -28,6 +28,7 @@
 
     <div id='map'></div>
     <div id='map-overlay' class='map-overlay'></div>
+    <%= javascript_tag "waste_data = #{@waste.to_json.html_safe};" %>
 
     <script>
     mapboxgl.accessToken =  'pk.eyJ1IjoibHVrZXJwZmVpZmZlciIsImEiOiJjam14aTZzbnExN3JkM2tuMTR3cGJybnE1In0.uYrpAhiX9b6uSo5i4nMTLg';
@@ -109,9 +110,17 @@
 
             var population = document.createElement('div');
             population.textContent = 'Total population: ' + populationSum.toLocaleString();
+            var waste = document.createElement('div');
+            county = feature.properties.COUNTY;
+            if (county.includes("County")) {
+              county = county.replace(" County", "");
+            }
+            waste.textContent = "\nFood Waste: " + waste_data[county].toFixed(2) + " tons per capita";
+            debugger
 
             overlay.appendChild(title);
             overlay.appendChild(population);
+            overlay.appendChild(waste);
             overlay.style.display = 'block';
 
             // Add features that share the same county name to the highlighted layer.
