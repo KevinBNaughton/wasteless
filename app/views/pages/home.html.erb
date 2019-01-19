@@ -57,7 +57,7 @@ map.on('load', function() {
         "filter": ["in", "COUNTY", ""]
     }, 'place-city-sm'); // Place polygon under these labels.
 
-    map.on('mousemove', 'counties', function(e) {
+    map.on('omousemove', 'counties', function(e) {
         // Change the cursor style as a UI indicator.
         map.getCanvas().style.cursor = 'pointer';
 
