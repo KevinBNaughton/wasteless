@@ -32,6 +32,12 @@
 
     <script>
     mapboxgl.accessToken =  'pk.eyJ1IjoibHVrZXJwZmVpZmZlciIsImEiOiJjam14aTZzbnExN3JkM2tuMTR3cGJybnE1In0.uYrpAhiX9b6uSo5i4nMTLg';
+    var sorted_data = []
+    for (var key in waste_data) {
+      sorted_data.push(waste_data[key]);
+    }
+    sorted_data.sort();
+
     var map = new mapboxgl.Map({
         container: 'map', // container id
         style: 'mapbox://styles/mapbox/streets-v9', // stylesheet location
@@ -58,7 +64,6 @@
             "type": "vector",
             "url": "mapbox://mapbox.82pkq93d"
         });
-
         map.addLayer({
             "id": "counties",
             "type": "fill",
@@ -77,7 +82,7 @@
             "source-layer": "original",
             "paint": {
                 "fill-outline-color": "#484896",
-                "fill-color": "#6e599f",
+                "fill-color": "#fff",
                 "fill-opacity": 0.75
             },
             "filter": ["in", "COUNTY", ""]
@@ -115,8 +120,8 @@
             if (county.includes("County")) {
               county = county.replace(" County", "");
             }
-            waste.textContent = "\nFood Waste: " + waste_data[county].toFixed(2) + " tons per capita";
-            debugger
+            waste_per_capita = waste_data[county]
+            waste.textContent = "\nFood Waste: " + waste_per_capita.toFixed(2) + " tons per capita";
 
             overlay.appendChild(title);
             overlay.appendChild(population);

@@ -2,6 +2,7 @@ require 'json'
 require 'csv'
 require 'pry'
 
+# 11 is the default value. This is the food waste in the csv
 class ExcelLoader
   def self.load_data(file, option = nil)
     counties = Hash.new
@@ -10,7 +11,6 @@ class ExcelLoader
     if option == "recycle_waste"
       val_index = 12
     end
-
     CSV.foreach(file) do |row|
       #binding.pry
       counties[row[0]] = row[val_index].gsub(",","").to_f / row[1].gsub(",","").to_f
@@ -18,4 +18,7 @@ class ExcelLoader
     counties
   end
 
+  private 
+  def get_val_index(option = nil)
+  end
 end
