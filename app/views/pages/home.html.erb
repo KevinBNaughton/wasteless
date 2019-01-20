@@ -5,26 +5,94 @@
   </head>
 
   <body>
-    
     <div class="form-popup" id="rating_form">
         <div class="container">
             <form class="form-container">
-            <h3>Send an email <br>to your local senator</h3>
-            <select ng-model="newRating.name">
-                <option value="Select Lot"  ng-value="listing.name" ng-repeat="listing in listings track by $index | orderBy: name">{{listing.name}}</option>
-                
+            <h3>Send an Email to the Florida Government</h3>
+            <p id='popup-margins'>It's time to help inform your government about the wasteful practices in your area. Your county in Florida may need better systems in place to increase recycling and decrease landfill waste per person.</p>
+
+            <select id="popup-margins">
+                <option value="County">County</option>
+                <option value="County">Alachua County</option>
+                <option value="County">Baker County</option>
+                <option value="County">Bay County</option>
+                <option value="County">Bradford County</option>
+                <option value="County">Brevard County</option>
+                <option value="County">Broward County</option>
+                <option value="County">Calhoun County</option>
+                <option value="County">Charlotte County</option>
+                <option value="County">Citrus County</option>
+                <option value="County">Clay County</option>
+                <option value="County">Collier County</option>
+                <option value="County">Columbia County</option>
+                <option value="County">DeSoto County</option>
+                <option value="County">Dixie County</option>
+                <option value="County">Duval County</option>
+                <option value="County">Escambia County</option>
+                <option value="County">Flagler County</option>
+                <option value="County">Franklin County</option>
+                <option value="County">Gadsden County</option>
+                <option value="County">Gilchrist County</option>
+                <option value="County">Glades County</option>
+                <option value="County">Gulf County</option>
+                <option value="County">Hamilton County</option>
+                <option value="County">Hardee County</option>
+                <option value="County">Hendry County</option>
+                <option value="County">Hernando County</option>
+                <option value="County">Highlands County</option>
+                <option value="County">Hillsborough County</option>
+                <option value="County">Holmes County</option>
+                <option value="County">Indian River County</option>
+                <option value="County">Jackson County</option>
+                <option value="County">Jefferson County</option>
+                <option value="County">Lafayette County</option>
+                <option value="County">Lake County</option>
+                <option value="County">Lee County</option>
+                <option value="County">Leon County</option>
+                <option value="County">Levy County</option>
+                <option value="County">Liberty County</option>
+                <option value="County">Madison County</option>
+                <option value="County">Manatee County</option>
+                <option value="County">Marion County</option>
+                <option value="County">Martin County</option>
+                <option value="County">Miami-Dade County</option>
+                <option value="County">Monroe County</option>
+                <option value="County">Nassau County</option>
+                <option value="County">Okaloosa County</option>
+                <option value="County">Okeechobee County</option>
+                <option value="County">Orange County</option>
+                <option value="County">Osceola County</option>
+                <option value="County">Palm Beach County</option>
+                <option value="County">Pasco County</option>
+                <option value="County">Pinellas County</option>
+                <option value="County">Polk County</option>
+                <option value="County">Putnam County</option>
+                <option value="County">Santa Rosa County</option>
+                <option value="County">Sarasota County</option>
+                <option value="County">Seminole County</option>
+                <option value="County">St. Johns County</option>
+                <option value="County">St. Lucie County</option>
+                <option value="County">Sumter County</option>
+                <option value="County">Suwannee County</option>
+                <option value="County">Taylor County</option>
+                <option value="County">Union County</option>
+                <option value="County">Volusia County</option>
+                <option value="County">Wakulla County</option>
+                <option value="County">Walton County</option>
+                <option value="County">Washington County</option>
+
             </select>
+
             <label for="email"><b>Email:</b></label>
-            <input type="text" placeholder="Enter email" ng-model="newRating.email" name="email" required>
+            <input type="text" placeholder="Enter your Email" name="email" required>
             <br>
-
-
-            <button type="submit" class="btn" ng-click="addRating()" onclick="window.location.reload()">Submit</button>
-            <button type="submit" class="btn cancel" onclick="closeForm()">Close</button>
+            <button id="popup-margins" type="submit" class="btn" onclick="window.location.reload()">Submit</button>
+            <button id="popup-margins" type="submit" class="btn cancel" onclick="closeForm()">Close</button>
             </form>
         </div>
     </div>
 
+    <div id='page-wrap' onclick="closeForm()">
 
     <div id='map'></div>
     <div id='map-overlay' class='map-overlay'></div>
@@ -47,7 +115,7 @@
     });
 
     map.on('load', function() {
-       
+
         var overlay = document.getElementById('map-overlay');
 
 
@@ -68,7 +136,7 @@
                 "fill-outline-color": "rgba(0,0,0,0.1)",
                 "fill-color": "rgba(0,0,0,0.1)"
             }
-        }, 'place-city-sm'); 
+        }, 'place-city-sm');
 
         map.addLayer({
             "id": "counties-highlighted",
@@ -141,7 +209,7 @@
     });
 
     </script>
-
+    </div>
     <button class="open-button" onclick="openForm()">Send an Email</button>
 
     <script>
@@ -155,12 +223,17 @@
 
     function openForm() {
       document.getElementById("rating_form").style.display = "block";
+      document.getElementById('page-wrap').className='blur';
     }
 
     function closeForm() {
       document.getElementById("rating_form").style.display = "none";
+      document.getElementById('page-wrap').className='page-wrap';
     }
+
     </script>
+
+
 
     </body>
 </html>
