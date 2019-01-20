@@ -99,12 +99,27 @@
     <%= javascript_tag "waste_data = #{@waste.to_json.html_safe};" %>
 
     <script>
+    // Set bounds to State of Florida
+    //31.040179, -87.767975 Northwest
+    //24.318651, -79.061155 Southeast
+    /*var bounds = [
+        [-87.767975, 31.040179], // Northwest coordinates
+        [-79.061155, 24.318651]  // Southeast coordinates
+    ];*/
     mapboxgl.accessToken =  'pk.eyJ1IjoibHVrZXJwZmVpZmZlciIsImEiOiJjam14aTZzbnExN3JkM2tuMTR3cGJybnE1In0.uYrpAhiX9b6uSo5i4nMTLg';
+    var sorted_data = []
+    for (var key in waste_data) {
+      sorted_data.push(waste_data[key]);
+    }
+    sorted_data.sort();
+
     var map = new mapboxgl.Map({
         container: 'map', // container id
         style: 'mapbox://styles/mapbox/streets-v9', // stylesheet location
-        center: [-82.3248, 29.6516], // starting position [lng, lat]
-        zoom: 5.5 // starting zoom
+        center: [-81.5667, 28.2420], // starting position [lng, lat]
+        zoom: 6.1, // starting zoom
+        interactive: false
+        //maxBounds: bounds // Sets bounds as max
     });
 
     var overlay = document.getElementById('map-overlay');
@@ -126,7 +141,6 @@
             "type": "vector",
             "url": "mapbox://mapbox.82pkq93d"
         });
-
         map.addLayer({
             "id": "counties",
             "type": "fill",
@@ -145,7 +159,7 @@
             "source-layer": "original",
             "paint": {
                 "fill-outline-color": "#484896",
-                "fill-color": "#6e599f",
+                "fill-color": "#fff",
                 "fill-opacity": 0.75
             },
             "filter": ["in", "COUNTY", ""]
@@ -183,8 +197,8 @@
             if (county.includes("County")) {
               county = county.replace(" County", "");
             }
-            waste.textContent = "\nFood Waste: " + waste_data[county].toFixed(2) + " tons per capita";
-            debugger
+            waste_per_capita = waste_data[county]
+            waste.textContent = "\nFood Waste: " + waste_per_capita.toFixed(2) + " tons per capita";
 
             overlay.appendChild(title);
             overlay.appendChild(population);
